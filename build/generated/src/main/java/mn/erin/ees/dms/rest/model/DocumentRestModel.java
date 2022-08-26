@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 /**
  * DocumentRestModel
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T16:09:31.849872100+08:00[Asia/Ulaanbaatar]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T16:10:30.236985800+08:00[Asia/Ulaanbaatar]")
 public class DocumentRestModel   {
   @JsonProperty("id")
   private String id;

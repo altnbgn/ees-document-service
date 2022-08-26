@@ -5,23 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de6e647-da11-456c-b41a-0c9afdbb8f56" name="Changes" comment="dunno">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/repository/DocumentRepositoryImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/usecase/DocumentDownloadDeleteRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/usecase/DownloadDocument.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/6/0/600d47e9c75969fd6f2b757a201aaa77dda9cb05" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/0/f07866736216be0ee2aba49e392191aeae700a35" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mn/erin/ees/dms/domain/document/api/DocumentsRestService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mn/erin/ees/dms/domain/document/api/DocumentsRestService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mn/erin/ees/dms/domain/document/repository/MongoDocumentRepositoryImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mn/erin/ees/dms/domain/document/repository/MongoDocumentRepositoryImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/DocumentApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/DocumentApi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/DocumentApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/DocumentApiController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/DocumentApiDelegate.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/DocumentApiDelegate.java" afterDir="false" />
@@ -34,22 +24,6 @@
       <change beforePath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/model/ErrorRestModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/model/ErrorRestModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/model/GenericErrorRestModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/src/main/java/mn/erin/ees/dms/rest/model/GenericErrorRestModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/generated/src/main/java/org/openapitools/configuration/OpenAPIDocumentationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/src/main/java/org/openapitools/configuration/OpenAPIDocumentationConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/api/DocumentsRestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/api/DocumentsRestService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/model/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/model/Document.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/model/DocumentInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/model/DocumentInput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/repository/MongoDocumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/repository/MongoDocumentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/repository/MongoDocumentRepositoryImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/usecase/CreateDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/usecase/CreateDocument.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/usecase/DocumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document/usecase/DocumentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/model/DocumentType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/model/DocumentType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/model/DocumentTypeInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/model/DocumentTypeInput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/repository/DocumentTypeRepositorylmpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/repository/DocumentTypeRepositorylmpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/usecase/CreateDocumentType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/usecase/CreateDocumentType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/usecase/DocumentTypeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mn/erin/ees/dms/domain/document_type/usecase/DocumentTypeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/document-api.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/document-api.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/mn/erin/ees/dms/domain/document/CreateDocumentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mn/erin/ees/dms/domain/document/CreateDocumentTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/mn/erin/ees/dms/domain/document_type/CreateDocumentTypeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mn/erin/ees/dms/domain/document_type/CreateDocumentTypeTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +98,7 @@
       <command value="gradle clean build" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.ees-document-service [clean build]">
+  <component name="RunManager" selected="Spring Boot.DocumentApplication">
     <configuration name="ees-document-service [clean build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -178,7 +152,7 @@
       <workItem from="1661495660174" duration="380000" />
       <workItem from="1661496469828" duration="145000" />
       <workItem from="1661496674778" duration="4047000" />
-      <workItem from="1661500842783" duration="428000" />
+      <workItem from="1661500842783" duration="1268000" />
     </task>
     <task id="LOCAL-00001" summary="dunno">
       <created>1661495879462</created>
@@ -208,7 +182,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661496875406</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="dunno">
+      <created>1661501400309</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1661501400310</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
