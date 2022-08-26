@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  accounting-reporting:
+    image: registry.erin.systems/accounting-reporting-service:latest
+    container_name: accounting-reporting-service
+    ports:
+      - "8812:8812"
+    depends_on:
+      - mongo-report
+    restart: always
+    networks:
+      - docker-compose_apache-kafka
+  mongo-report:
+    image: "mongo:5.0.5"
+    hostname: mongo-report
+    container_name: mongo-report
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "erin"
+      MONGO_INITDB_ROOT_PASSWORD: "ErinAdmin"
+    volumes:
+      - ./mongo-data:/data/db
+    ports:
+      - "27018:27017"
+    restart: always
+    networks:
+      - docker-compose_apache-kafka
+
+networks:
+  docker-compose_apache-kafka:
+    external: true
+volumes:
+  mongo-data:

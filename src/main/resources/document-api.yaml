@@ -1,0 +1,169 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: EES Document REST API
+  description: EES Document REST API definitions
+
+servers:
+  - url: /documentApi
+
+paths:
+  /document/get/{organizationId}/{groupId}:
+    get:
+      summary: returns all documents
+      operationId: getDocuments
+      tags:
+        - Documents
+      parameters:
+          - name: organizationId
+            in: path
+            description: ID of the organization
+            required: true
+            schema:
+              type: string
+          - name: groupId
+            in: path
+            description: ID of the group
+            required: true
+            schema:
+              type: string
+      responses:
+        201:
+          description: Document list
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+
+  /document/create/{organizationId}/{groupId}/{createdUser}/{documentName}/{documentType}/{createdDate}/{description}:
+    post:
+      summary: upload documents
+      operationId: createDocument
+      tags:
+        - Documents
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of the organization
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: ID of the group
+          required: true
+          schema:
+            type: string
+        - name: createdUser
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: string
+        - name: documentName
+          in: path
+          description: ID of the organization
+          required: true
+          schema:
+            type: string
+        - name: documentType
+          in: path
+          description: ID of the group
+          required: true
+          schema:
+            type: string
+        - name: createdDate
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: string
+        - name: description
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentInput'
+      responses:
+        201:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        400:
+          description: Input data invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+        404:
+          description: Selected folder does not exit
+        default:
+          description: General document list JSON model
+
+
+components:
+  schemas:
+
+    Error:
+      type: object
+      properties:
+        reason:
+          type: string
+        message:
+          type: string
+
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: string
+        groupId:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        createdUser:
+          type: string
+        date:
+          type: string
+        path:
+          type: string
+        description:
+          type: string
+        file:
+          type: string
+      required:
+           - id
+           - organizationId
+           - groupId
+           - name
+           - type
+           - createdUser
+           - date
+           - path
+           - description
+           - file
+
+
+    DocumentInput:
+      type: object
+      required:
+        - file
+      properties:
+        file:
+          type: string
+          format: binary
