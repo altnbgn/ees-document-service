@@ -1,0 +1,28 @@
+/camunda-h2-database.mv.db
+
+.idea
+
+# IntelliJ
+out/
+
+### Gradle template
+.gradle
+
+target/
+
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# Dependency directories
+node_modules/
+
+# TypesScript
+dist/
