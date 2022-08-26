@@ -2,29 +2,29 @@ package mn.erin.ees.dms.domain.document_type.model;
 
 public class DocumentTypeInput
 {
-  private final String organizationID;
-  private final String groupID;
+  private final String organizationId;
+  private final String groupId;
   private final String name;
   private final String category;
   private final String description;
 
-  public DocumentTypeInput(String organizationID, String groupID, String name, String category, String description)
+  public DocumentTypeInput(String organizationId, String groupId, String name, String category, String description)
   {
-    this.organizationID = organizationID;
-    this.groupID = groupID;
+    this.organizationId = organizationId;
+    this.groupId = groupId;
     this.name = name;
     this.category = category;
     this.description = description;
   }
 
-  public String getOrganizationID()
+  public String getOrganizationId()
   {
-    return organizationID;
+    return organizationId;
   }
 
-  public String getGroupID()
+  public String getGroupId()
   {
-    return groupID;
+    return groupId;
   }
 
   public String getName()

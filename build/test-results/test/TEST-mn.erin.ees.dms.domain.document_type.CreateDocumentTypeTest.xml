@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2022-08-26T06:51:39" hostname="ERINNB13" time="0.469">
+<testsuite name="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2022-08-26T08:09:37" hostname="ERINNB13" time="0.012">
   <properties/>
-  <testcase name="throws_exception_if_category_is_missing()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.445"/>
+  <testcase name="throws_exception_if_category_is_missing()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.002"/>
   <testcase name="throws_exception_if_organizationID_is_missing()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.002"/>
-  <testcase name="creates_document_type()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.012"/>
-  <testcase name="throws_exception_if_name_is_duplicate()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.003"/>
+  <testcase name="creates_document_type()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.001"/>
+  <testcase name="throws_exception_if_name_is_duplicate()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.002"/>
   <testcase name="name_is_trimed()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.001"/>
-  <testcase name="throws_exception_if_groupID_is_missing()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.001"/>
+  <testcase name="throws_exception_if_groupID_is_missing()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.0"/>
   <testcase name="throws_exception_if_name_is_missing()" classname="mn.erin.ees.dms.domain.document_type.CreateDocumentTypeTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

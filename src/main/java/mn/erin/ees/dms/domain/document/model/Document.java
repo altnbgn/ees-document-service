@@ -58,7 +58,6 @@ public class Document
   {
     this.createdUser = this.createdUser;
   }
-
   public void setDate(LocalDate date)
   {
     this.createdDate = date;

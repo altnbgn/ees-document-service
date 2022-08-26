@@ -18,11 +18,11 @@ public class CreateDocumentType
 
   public DocumentType execute(DocumentTypeInput input) throws CreateDocumentTypeException
   {
-    if (StringUtils.isBlank(input.getOrganizationID()))
+    if (StringUtils.isBlank(input.getOrganizationId()))
     {
       throw new CreateDocumentTypeException(ExceptionReason.INPUT_INVALID, "Organization ID is missing!");
     }
-    if (StringUtils.isBlank(input.getGroupID()))
+    if (StringUtils.isBlank(input.getGroupId()))
     {
       throw new CreateDocumentTypeException(ExceptionReason.INPUT_INVALID, "Group ID is missing!");
     }
@@ -40,8 +40,8 @@ public class CreateDocumentType
       throw new CreateDocumentTypeException(ExceptionReason.DUPLICATE, "Duplicate document type " + name);
     }
 
-    return documentTypeRepository.createDocumentType(input.getOrganizationID(),
-        input.getGroupID(),
+    return documentTypeRepository.createDocumentType(input.getOrganizationId(),
+        input.getGroupId(),
         name,
         input.getCategory(),
         input.getDescription());

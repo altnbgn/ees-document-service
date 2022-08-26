@@ -20,13 +20,13 @@ public class DocumentTypeRepositorylmpl implements DocumentTypeRepository
   }
 
   @Override
-  public DocumentType createDocumentType(String organizationID,
-      String groupID,
+  public DocumentType createDocumentType(String organizationId,
+      String groupId,
       String name,
       String category,
       String description)
   {
-    MongoDocumentType mongoDocumentType = new MongoDocumentType(null, "", organizationID, groupID, category, name);
+    MongoDocumentType mongoDocumentType = new MongoDocumentType(null, "", organizationId, groupId, category, name);
     mongoDocumentType.setDescription(description);
     return mapper(mongoDocumentTypeRepository.save(mongoDocumentType));
   }

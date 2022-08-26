@@ -28,7 +28,7 @@ paths:
             schema:
               type: string
       responses:
-        201:
+        200:
           description: Document list
           content:
             'application/json':
@@ -36,6 +36,28 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Document'
+  /document/content/{contentId}:
+    get:
+      summary: return file
+      operationId: getFile
+      tags:
+        - Document Content
+      parameters:
+        - name: contentId
+          in: path
+          description: ID of the content
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            'application/octet-stream':
+              schema:
+                type: string
+                format: binary
+
 
   /document/create/{organizationId}/{groupId}/{createdUser}/{documentName}/{documentType}/{createdDate}/{description}:
     post:

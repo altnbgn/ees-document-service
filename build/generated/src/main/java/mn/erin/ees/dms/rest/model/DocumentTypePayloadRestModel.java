@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 /**
  * DocumentTypePayloadRestModel
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T14:54:11.908666800+08:00[Asia/Ulaanbaatar]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T16:09:31.991869400+08:00[Asia/Ulaanbaatar]")
 public class DocumentTypePayloadRestModel   {
   @JsonProperty("groupId")
   private String groupId;

@@ -10,12 +10,12 @@ public class DocumentType
   private final String name;
   private final String description;
 
-  public DocumentType(String id, String createdBy, String organizationID, String groupID, String category, String name, String description)
+  public DocumentType(String id, String createdBy, String organizationId, String groupId, String category, String name, String description)
   {
     this.id = id;
     this.createdBy = createdBy;
-    this.organizationId = organizationID;
-    this.groupId = groupID;
+    this.organizationId = organizationId;
+    this.groupId = groupId;
     this.category = category;
     this.name = name;
     this.description = description;

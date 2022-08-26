@@ -2,8 +2,6 @@ package mn.erin.ees.dms.domain.document.model;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public class DocumentInput
@@ -12,9 +10,12 @@ public class DocumentInput
   private String groupId;
   private String documentName;
   private String createdUser;
+
   private String documentType;
   private LocalDate createdDate;
+
   private String description;
+
   private MultipartFile file;
 
   public DocumentInput(String organizationId, String groupId, String documentName, String createdUser, String documentType, LocalDate createdDate,

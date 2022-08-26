@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T14:54:11.730668900+08:00[Asia/Ulaanbaatar]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T16:09:31.849872100+08:00[Asia/Ulaanbaatar]")
 @Validated
 @Api(value = "document", description = "the document API")
 public interface DocumentApi {
@@ -66,11 +66,11 @@ public interface DocumentApi {
      *
      * @param organizationId ID of the organization (required)
      * @param groupId ID of the group (required)
-     * @return Document list (status code 201)
+     * @return Document list (status code 200)
      */
     @ApiOperation(value = "returns all documents", nickname = "getDocuments", notes = "", response = DocumentRestModel.class, responseContainer = "List", tags={ "Documents", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 201, message = "Document list", response = DocumentRestModel.class, responseContainer = "List") })
+        @ApiResponse(code = 200, message = "Document list", response = DocumentRestModel.class, responseContainer = "List") })
     @RequestMapping(
         method = RequestMethod.GET,
         value = "/document/get/{organizationId}/{groupId}",
@@ -78,6 +78,25 @@ public interface DocumentApi {
     )
     default ResponseEntity<List<DocumentRestModel>> getDocuments(@ApiParam(value = "ID of the organization", required = true) @PathVariable("organizationId") String organizationId,@ApiParam(value = "ID of the group", required = true) @PathVariable("groupId") String groupId) {
         return getDelegate().getDocuments(organizationId, groupId);
+    }
+
+
+    /**
+     * GET /document/content/{contentId} : return file
+     *
+     * @param contentId ID of the content (required)
+     * @return Success (status code 200)
+     */
+    @ApiOperation(value = "return file", nickname = "getFile", notes = "", response = org.springframework.core.io.Resource.class, tags={ "Document Content", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = org.springframework.core.io.Resource.class) })
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/document/content/{contentId}",
+        produces = { "application/octet-stream" }
+    )
+    default ResponseEntity<org.springframework.core.io.Resource> getFile(@ApiParam(value = "ID of the content", required = true) @PathVariable("contentId") String contentId) {
+        return getDelegate().getFile(contentId);
     }
 
 }

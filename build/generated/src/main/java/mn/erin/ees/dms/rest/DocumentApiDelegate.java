@@ -17,7 +17,7 @@ import java.util.Optional;
  * A delegate to be called by the {@link DocumentApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T14:54:11.730668900+08:00[Asia/Ulaanbaatar]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T16:09:31.849872100+08:00[Asia/Ulaanbaatar]")
 public interface DocumentApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -68,7 +68,7 @@ public interface DocumentApiDelegate {
      *
      * @param organizationId ID of the organization (required)
      * @param groupId ID of the group (required)
-     * @return Document list (status code 201)
+     * @return Document list (status code 200)
      * @see DocumentApi#getDocuments
      */
     default ResponseEntity<List<DocumentRestModel>> getDocuments(String organizationId,
@@ -82,6 +82,18 @@ public interface DocumentApiDelegate {
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /document/content/{contentId} : return file
+     *
+     * @param contentId ID of the content (required)
+     * @return Success (status code 200)
+     * @see DocumentApi#getFile
+     */
+    default ResponseEntity<org.springframework.core.io.Resource> getFile(String contentId) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
