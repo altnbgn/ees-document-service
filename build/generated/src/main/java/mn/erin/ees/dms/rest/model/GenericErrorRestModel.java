@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 /**
  * GenericErrorRestModel
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T11:52:25.335383800+08:00[Asia/Ulaanbaatar]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T14:41:06.294612900+08:00[Asia/Ulaanbaatar]")
 public class GenericErrorRestModel   {
   @JsonProperty("message")
   private String message;

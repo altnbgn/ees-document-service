@@ -3,7 +3,7 @@ package mn.erin.ees.dms.rest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T11:52:25.094573400+08:00[Asia/Ulaanbaatar]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T14:41:06.142943100+08:00[Asia/Ulaanbaatar]")
 @Controller
 @RequestMapping("${openapi.eESDocumentREST.base-path:/documentApi}")
 public class DocumentApiController implements DocumentApi {

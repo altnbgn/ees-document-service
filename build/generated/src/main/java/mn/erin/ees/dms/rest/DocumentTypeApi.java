@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T11:52:25.335383800+08:00[Asia/Ulaanbaatar]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-08-26T14:41:06.294612900+08:00[Asia/Ulaanbaatar]")
 @Validated
 @Api(value = "document-type", description = "the document-type API")
 public interface DocumentTypeApi {

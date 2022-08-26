@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="mn.erin.ees.dms.domain.document.CreateDocumentTest" tests="6" skipped="6" failures="0" errors="0" timestamp="2022-08-26T03:52:31" hostname="ERINNB13" time="0.001">
+<testsuite name="mn.erin.ees.dms.domain.document.CreateDocumentTest" tests="6" skipped="6" failures="0" errors="0" timestamp="2022-08-26T06:40:06" hostname="ERINNB13" time="0.001">
   <properties/>
-  <testcase name="throws_exception_if_documentType_is_missing()" classname="mn.erin.ees.dms.domain.document.CreateDocumentTest" time="0.0">
+  <testcase name="throws_exception_if_documentType_is_missing()" classname="mn.erin.ees.dms.domain.document.CreateDocumentTest" time="0.001">
     <skipped/>
   </testcase>
   <testcase name="throws_exception_if_organizationID_is_missing()" classname="mn.erin.ees.dms.domain.document.CreateDocumentTest" time="0.0">
