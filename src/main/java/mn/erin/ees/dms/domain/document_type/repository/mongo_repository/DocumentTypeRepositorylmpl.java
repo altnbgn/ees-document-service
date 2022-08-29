@@ -1,4 +1,4 @@
-package mn.erin.ees.dms.domain.document_type.repository;
+package mn.erin.ees.dms.domain.document_type.repository.mongo_repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import mn.erin.ees.dms.domain.document_type.model.DocumentType;
-import mn.erin.ees.dms.domain.document_type.usecase.DocumentTypeRepository;
+import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 
 @Repository
 public class DocumentTypeRepositorylmpl implements DocumentTypeRepository
@@ -35,11 +35,7 @@ public class DocumentTypeRepositorylmpl implements DocumentTypeRepository
   public DocumentType getDocumentTypeById(String id)
   {
     Optional<MongoDocumentType> output = mongoDocumentTypeRepository.findById(id);
-    if (output.isPresent())
-    {
-      return mapper(output.get());
-    }
-    return null;
+    return output.map(this::mapper).orElse(null);
   }
 
   @Override

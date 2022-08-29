@@ -1,4 +1,4 @@
-package mn.erin.ees.dms.domain.document_type.repository;
+package mn.erin.ees.dms.domain.document_type.repository.mongo_repository;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

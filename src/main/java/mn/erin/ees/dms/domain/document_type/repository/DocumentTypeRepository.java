@@ -1,4 +1,4 @@
-package mn.erin.ees.dms.domain.document_type.usecase;
+package mn.erin.ees.dms.domain.document_type.repository;
 
 import java.util.List;
 

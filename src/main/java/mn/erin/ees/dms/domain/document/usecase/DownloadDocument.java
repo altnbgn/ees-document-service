@@ -1,8 +1,8 @@
 package mn.erin.ees.dms.domain.document.usecase;
 
-import java.util.stream.Stream;
-
 import org.springframework.data.mongodb.gridfs.GridFsResource;
+
+import mn.erin.ees.dms.domain.document.repository.mongo_repository.DocumentDownloadDeleteRepository;
 
 public class DownloadDocument
 {

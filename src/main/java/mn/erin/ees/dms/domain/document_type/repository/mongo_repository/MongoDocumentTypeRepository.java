@@ -1,4 +1,4 @@
-package mn.erin.ees.dms.domain.document_type.repository;
+package mn.erin.ees.dms.domain.document_type.repository.mongo_repository;
 
 import java.util.Optional;
 

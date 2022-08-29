@@ -3,6 +3,7 @@ package mn.erin.ees.dms.domain.document.usecase;
 import java.util.List;
 
 import mn.erin.ees.dms.domain.document.model.Document;
+import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
 
 public class GetDocuments
 {

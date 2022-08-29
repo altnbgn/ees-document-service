@@ -1,4 +1,4 @@
-package mn.erin.ees.dms.domain.document.repository;
+package mn.erin.ees.dms.domain.document.repository.mongo_repository;
 
 import java.time.LocalDate;
 
@@ -23,9 +23,11 @@ public class MongoDocument
   private String createdUser;
   @Indexed
   private LocalDate date;
+  @Indexed
   private String description;
   @Indexed
   private String fileName;
+  @Indexed
   private String contentId;
 
   public MongoDocument(String organizationId, String groupId, String documentName, String documentType, String createdUser,

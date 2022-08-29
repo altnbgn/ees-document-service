@@ -2,6 +2,8 @@ package mn.erin.ees.dms.domain.document.model;
 
 import java.time.LocalDate;
 
+import org.apache.commons.lang3.Validate;
+
 public class Document
 {
   private String id;
@@ -18,15 +20,15 @@ public class Document
   public Document(String id, String organizationId, String groupId, String documentName, String createdUser,String documentType,
       LocalDate date, String file, String path)
   {
-    this.id = id;
-    this.organizationId = organizationId;
-    this.groupId = groupId;
-    this.documentName = documentName;
-    this.type = documentType;
-    this.createdUser = createdUser;
-    this.file = file;
-    this.path = path;
-    this.createdDate = date;
+    this.id = Validate.notBlank(id);
+    this.organizationId = Validate.notBlank(organizationId);
+    this.groupId = Validate.notBlank(groupId);
+    this.documentName = Validate.notBlank(documentName);
+    this.type = Validate.notBlank(documentType);
+    this.createdUser = Validate.notBlank(createdUser);
+    this.file = Validate.notBlank(file);
+    this.path = Validate.notBlank(path);
+    this.createdDate = Validate.notNull(date);
   }
 
   public void setId(String id)

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import mn.erin.ees.dms.domain.document_type.model.DocumentType;
 import mn.erin.ees.dms.domain.document_type.model.DocumentTypeInput;
 import mn.erin.ees.dms.domain.document_type.usecase.CreateDocumentType;
-import mn.erin.ees.dms.domain.document_type.usecase.DocumentTypeRepository;
+import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 import mn.erin.ees.dms.domain.document_type.usecase.GetDocumentTypes;
 import mn.erin.ees.dms.rest.DocumentTypeApiDelegate;
 import mn.erin.ees.dms.rest.model.DocumentTypePayloadRestModel;

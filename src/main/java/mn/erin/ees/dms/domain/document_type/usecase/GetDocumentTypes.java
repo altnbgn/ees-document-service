@@ -3,6 +3,7 @@ package mn.erin.ees.dms.domain.document_type.usecase;
 import java.util.List;
 
 import mn.erin.ees.dms.domain.document_type.model.DocumentType;
+import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 
 public class GetDocumentTypes
 {
