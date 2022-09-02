@@ -11,21 +11,21 @@ public class DocumentInput
   private String documentName;
   private String createdUser;
 
-  private String documentType;
+  private String documentTypeId;
   private LocalDate createdDate;
 
   private String description;
 
   private MultipartFile file;
 
-  public DocumentInput(String organizationId, String groupId, String documentName, String createdUser, String documentType, LocalDate createdDate,
+  public DocumentInput(String organizationId, String groupId, String documentName, String createdUser, String documentTypeId, LocalDate createdDate,
       String description, MultipartFile file)
   {
     this.organizationId = organizationId;
     this.groupId = groupId;
     this.documentName = documentName;
     this.createdUser = createdUser;
-    this.documentType = documentType;
+    this.documentTypeId = documentTypeId;
     this.createdDate = createdDate;
     this.description = description;
     this.file = file;
@@ -71,14 +71,14 @@ public class DocumentInput
     this.createdUser = createdUser;
   }
 
-  public String getDocumentType()
+  public String getDocumentTypeId()
   {
-    return documentType;
+    return documentTypeId;
   }
 
-  public void setDocumentType(String documentType)
+  public void setDocumentTypeId(String documentTypeId)
   {
-    this.documentType = documentType;
+    this.documentTypeId = documentTypeId;
   }
 
   public LocalDate getCreatedDate()

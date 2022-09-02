@@ -1,0 +1,23 @@
+
+
+# SiteMembershipBodyUpdate
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**role** | [**RoleEnum**](#RoleEnum) |  | 
+
+
+
+## Enum: RoleEnum
+
+Name | Value
+---- | -----
+SITECONSUMER | &quot;SiteConsumer&quot;
+SITECOLLABORATOR | &quot;SiteCollaborator&quot;
+SITECONTRIBUTOR | &quot;SiteContributor&quot;
+SITEMANAGER | &quot;SiteManager&quot;
+
+
+

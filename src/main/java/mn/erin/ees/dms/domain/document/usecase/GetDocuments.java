@@ -11,13 +11,14 @@ public class GetDocuments
 
   public GetDocuments(DocumentRepository documentRepository)
   {
-    this.documentRepository=documentRepository;
+    this.documentRepository = documentRepository;
   }
+
   public List<Document> execute(String organizationId, String groupId)
   {
     try
     {
-      return documentRepository.get(organizationId,groupId);
+      return documentRepository.get(organizationId, groupId);
     }
     catch (Exception e)
     {

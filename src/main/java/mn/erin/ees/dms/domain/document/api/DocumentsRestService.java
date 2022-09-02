@@ -2,11 +2,10 @@ package mn.erin.ees.dms.domain.document.api;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -14,66 +13,81 @@ import org.springframework.web.multipart.MultipartFile;
 
 import mn.erin.ees.dms.domain.document.model.Document;
 import mn.erin.ees.dms.domain.document.model.DocumentInput;
-import mn.erin.ees.dms.domain.document.usecase.CreateDocument;
-import mn.erin.ees.dms.domain.document.repository.mongo_repository.DocumentDownloadDeleteRepository;
+import mn.erin.ees.dms.domain.document.repository.DocumentMetaRepositoryImpl;
 import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
+import mn.erin.ees.dms.domain.document.usecase.CreateDocument;
 import mn.erin.ees.dms.domain.document.usecase.DownloadDocument;
 import mn.erin.ees.dms.domain.document.usecase.GetDocuments;
 import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 import mn.erin.ees.dms.rest.DocumentApiDelegate;
+import mn.erin.ees.dms.rest.model.DocumentCreationResponseRestModel;
 import mn.erin.ees.dms.rest.model.DocumentRestModel;
+import mn.erin.ees.dms.rest.model.DocumentsRestModel;
 import mn.erin.ees.dms.rest.model.ErrorRestModel;
+import mn.erin.ees.dms.rest.model.GetFileResponseRestModel;
 import mn.erin.ees.dms.utilities.DocumentCreationException;
 
 @Component
 @Service
 public class DocumentsRestService implements DocumentApiDelegate
 {
-  @Autowired
-  private DocumentRepository documentRepository;
+  private final DocumentRepository documentRepository;
+  private final DocumentTypeRepository documentTypeRepository;
+  private final DocumentMetaRepositoryImpl documentMetaRepositoryImpl;
 
-  @Autowired
-  private DocumentDownloadDeleteRepository documentDownloadDeleteRepository;
-  @Autowired
-  private DocumentTypeRepository documentTypeRepository;
+  public DocumentsRestService(DocumentRepository documentRepository, DocumentTypeRepository documentTypeRepository,
+      DocumentMetaRepositoryImpl documentMetaRepositoryImpl)
+  {
+    this.documentRepository = documentRepository;
+    this.documentTypeRepository = documentTypeRepository;
+    this.documentMetaRepositoryImpl = documentMetaRepositoryImpl;
+  }
 
   @Override
-  public ResponseEntity<DocumentRestModel> createDocument(String organizationId, String groupId, String documentName, String createdUser, String documentType,
-      String createDate, String description, MultipartFile file)
+  public ResponseEntity<DocumentCreationResponseRestModel> upload(String organizationId, String groupId, String createdUser, String documentName,
+      String documentType,
+      String createdDate, String description, MultipartFile file)
   {
     try
     {
-      LocalDate date = LocalDate.parse(createDate);
-      Document document = new CreateDocument(documentRepository, documentTypeRepository).execute(
-          new DocumentInput(organizationId, groupId, documentName, createdUser, documentType,
-              date, description, file));
-      // todo convert document to document rest model
-      DocumentRestModel documentRestModel = new DocumentRestModel();
-      return ResponseEntity.created(URI.create("id")).body(documentRestModel);
+      LocalDate date = LocalDate.parse(createdDate);
+      String documentId = new CreateDocument(documentRepository, documentTypeRepository, documentMetaRepositoryImpl).execute(
+          new DocumentInput(organizationId, groupId, documentName, createdUser, documentType, date, description, file));
+      return ResponseEntity.created(URI.create("id")).body(new DocumentCreationResponseRestModel().id(documentId));
     }
     catch (DocumentCreationException e)
     {
-      return (ResponseEntity) ResponseEntity.badRequest().body(new ErrorRestModel().reason(e.reason.name()).message(e.getMessage()));
+      return ResponseEntity.internalServerError().body(new DocumentCreationResponseRestModel().error(new ErrorRestModel().message(e.getMessage())));
     }
   }
 
   @Override
-  public ResponseEntity<List<DocumentRestModel>> getDocuments(String organizationId, String groupId)
+  public ResponseEntity<DocumentsRestModel> getDocuments(String organizationId, String groupId)
   {
     GetDocuments getDocuments = new GetDocuments(documentRepository);
     try
     {
       List<Document> documentsList = getDocuments.execute(organizationId, groupId);
-      List<DocumentRestModel> documents = new ArrayList<>();
-      for (Document document1 : documentsList)
-      {
-        documents.add(mapToDocumentRestModel(document1));
-      }
-      return ResponseEntity.ok(documents);
+      return ResponseEntity.ok(new DocumentsRestModel().documents(documentsList.stream().map(this::mapToDocumentRestModel).collect(Collectors.toList())));
+    }
+
+    catch (Exception e)
+    {
+      return ResponseEntity.internalServerError().body(new DocumentsRestModel().error(new ErrorRestModel().message(e.getMessage())));
+    }
+  }
+
+  @Override
+  public ResponseEntity<Resource> download(String contentId)
+  {
+    DownloadDocument downloadDocument = new DownloadDocument(documentRepository, documentMetaRepositoryImpl);
+    try
+    {
+      return ResponseEntity.ok(downloadDocument.execute(contentId).getFileResource());
     }
     catch (Exception e)
     {
-      return (ResponseEntity) ResponseEntity.badRequest().body(e);
+      return null;
     }
   }
 
@@ -87,22 +101,7 @@ public class DocumentsRestService implements DocumentApiDelegate
         .type(document.getType())
         .createdUser(document.getCreatedUser())
         .date(document.getCreatedDate().toString())
-        .file(document.getFile())
-        .path(document.getPath());
-  }
-
-  @Override
-  public ResponseEntity<org.springframework.core.io.Resource> getFile(String contentId)
-  {
-    DownloadDocument downloadDocument = new DownloadDocument(documentDownloadDeleteRepository);
-    try
-    {
-      GridFsResource data = downloadDocument.execute(contentId);
-      return ResponseEntity.ok(data);
-    }
-    catch (Exception e)
-    {
-      return (ResponseEntity) ResponseEntity.badRequest().body(e);
-    }
+        .file(document.getFileName())
+        .path(document.getContentId());
   }
 }

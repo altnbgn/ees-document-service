@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import mn.erin.ees.dms.domain.document.model.Document;
 import mn.erin.ees.dms.domain.document.model.DocumentInput;
+import mn.erin.ees.dms.domain.document.repository.DocumentMetaRepositoryImpl;
 import mn.erin.ees.dms.domain.document.usecase.CreateDocument;
 import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
 import mn.erin.ees.dms.domain.document_type.model.DocumentType;
@@ -20,30 +20,35 @@ class CreateDocumentTest
 {
   DocumentRepository documentRepository;
   DocumentTypeRepository documentTypeRepository;
+  DocumentMetaRepositoryImpl documentMetaRepositoryImpl;
   LocalDate date;
   DocumentInput input;
-  DocumentType documentType;
+  DocumentType documentTypeMock;
+  String contentId;
 
   @BeforeEach
-  void setup() throws IOException
+  void setup() throws IOException, DocumentCreationException
   {
     documentRepository = Mockito.mock(DocumentRepository.class);
     documentTypeRepository = Mockito.mock(DocumentTypeRepository.class);
+    documentMetaRepositoryImpl = Mockito.mock(DocumentMetaRepositoryImpl.class);
     date = LocalDate.parse("2020-07-06");
     input = Mockito.mock(DocumentInput.class);
-    documentType = Mockito.mock(DocumentType.class);
+    documentTypeMock = Mockito.mock(DocumentType.class);
 
     //input
+    contentId = "contentId";
     Mockito.when(input.getCreatedDate()).thenReturn(date);
     Mockito.when(input.getOrganizationId()).thenReturn("organizationId");
     Mockito.when(input.getGroupId()).thenReturn("groupId");
-    Mockito.when(input.getDocumentType()).thenReturn("type");
+    Mockito.when(input.getDocumentTypeId()).thenReturn("type");
     Mockito.when(input.getDocumentName()).thenReturn("documentName");
     Mockito.when(input.getCreatedUser()).thenReturn("createdUser");
     Mockito.when(input.getDescription()).thenReturn("description");
 
-    Mockito.when(documentTypeRepository.getDocumentTypeById(input.getDocumentType())).thenReturn(documentType);
-    Mockito.when(documentRepository.fileSave(input, documentType)).thenReturn(Mockito.mock(Document.class));
+    Mockito.when(documentTypeRepository.getDocumentTypeById(input.getDocumentTypeId())).thenReturn(documentTypeMock);
+    Mockito.when(documentRepository.fileSave(input, documentTypeMock)).thenReturn(contentId);
+    Mockito.when(documentMetaRepositoryImpl.save(contentId, input, documentTypeMock)).thenReturn(contentId);
   }
 
   @Test
@@ -81,7 +86,7 @@ class CreateDocumentTest
   @Test
   void executeThrowsExceptionWhenDocumentTypeNull()
   {
-    Mockito.when(input.getDocumentType()).thenReturn(null);
+    Mockito.when(input.getDocumentTypeId()).thenReturn(null);
     Assertions.assertThrows(DocumentCreationException.class, () ->
         createDocument().execute(input));
   }
@@ -97,15 +102,23 @@ class CreateDocumentTest
   @Test
   void executeThrowsWhenDocumentTypeNotCreated()
   {
-    Mockito.when(documentTypeRepository.getDocumentTypeById(input.getDocumentType())).thenReturn(null);
+    Mockito.when(documentTypeRepository.getDocumentTypeById(input.getDocumentTypeId())).thenReturn(null);
     Assertions.assertThrows(DocumentCreationException.class, () ->
         createDocument().execute(input));
   }
 
   @Test
-  void executeThrowsExceptionWhenIOExceptionThrown() throws IOException
+  void executeThrowsWhenFileNotSaved() throws DocumentCreationException, IOException
   {
-    Mockito.when(documentRepository.fileSave(input, documentType)).thenThrow(IOException.class);
+    Mockito.when(documentRepository.fileSave(input, documentTypeMock)).thenReturn(null);
+    Assertions.assertThrows(DocumentCreationException.class, () ->
+        createDocument().execute(input));
+  }
+
+  @Test
+  void executeThrowsExceptionWhenIOExceptionThrown() throws IOException, DocumentCreationException
+  {
+    Mockito.when(documentRepository.fileSave(input, documentTypeMock)).thenThrow(IOException.class);
     Assertions.assertThrows(DocumentCreationException.class, () ->
         createDocument().execute(input));
   }
@@ -118,6 +131,6 @@ class CreateDocumentTest
 
   private CreateDocument createDocument()
   {
-    return new CreateDocument(documentRepository, documentTypeRepository);
+    return new CreateDocument(documentRepository, documentTypeRepository, documentMetaRepositoryImpl);
   }
 }

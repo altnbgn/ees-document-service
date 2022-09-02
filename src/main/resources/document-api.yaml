@@ -33,15 +33,15 @@ paths:
           content:
             'application/json':
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Document'
+                $ref: '#/components/schemas/Documents'
+
   /document/content/{contentId}:
     get:
       summary: return file
-      operationId: getFile
+      operationId: download
+      description: Download a document
       tags:
-        - Document Content
+        - Document
       parameters:
         - name: contentId
           in: path
@@ -53,7 +53,7 @@ paths:
         200:
           description: Success
           content:
-            'application/octet-stream':
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -62,7 +62,8 @@ paths:
   /document/create/{organizationId}/{groupId}/{createdUser}/{documentName}/{documentType}/{createdDate}/{description}:
     post:
       summary: upload documents
-      operationId: createDocument
+      operationId: upload
+      description: Upload a document
       tags:
         - Documents
       parameters:
@@ -119,7 +120,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Document'
+                $ref: '#/components/schemas/DocumentCreationResponse'
         400:
           description: Input data invalid
           content:
@@ -186,6 +187,36 @@ components:
       required:
         - file
       properties:
+        file:
+          type: string
+          format: binary
+
+    DocumentCreationResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        id:
+          type: string
+          description: created document id
+
+    Documents:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+
+    GetFileResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        document:
+          $ref: '#/components/schemas/Document'
         file:
           type: string
           format: binary

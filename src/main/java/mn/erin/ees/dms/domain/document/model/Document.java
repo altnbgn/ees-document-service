@@ -3,6 +3,7 @@ package mn.erin.ees.dms.domain.document.model;
 import java.time.LocalDate;
 
 import org.apache.commons.lang3.Validate;
+import org.springframework.core.io.Resource;
 
 public class Document
 {
@@ -13,12 +14,13 @@ public class Document
   private String type;
   private String createdUser;
   private LocalDate createdDate;
+  private String fileName;
+  private String contentId;
   private String description;
-  private String file;
-  private String path;
+  private Resource fileResource;
 
-  public Document(String id, String organizationId, String groupId, String documentName, String createdUser,String documentType,
-      LocalDate date, String file, String path)
+  public Document(String id, String organizationId, String groupId, String documentName, String createdUser, String documentType,
+      LocalDate date, String fileName, String contentId)
   {
     this.id = Validate.notBlank(id);
     this.organizationId = Validate.notBlank(organizationId);
@@ -26,10 +28,11 @@ public class Document
     this.documentName = Validate.notBlank(documentName);
     this.type = Validate.notBlank(documentType);
     this.createdUser = Validate.notBlank(createdUser);
-    this.file = Validate.notBlank(file);
-    this.path = Validate.notBlank(path);
+    this.fileName = Validate.notBlank(fileName);
+    this.contentId = Validate.notBlank(contentId);
     this.createdDate = Validate.notNull(date);
   }
+
 
   public void setId(String id)
   {
@@ -60,6 +63,7 @@ public class Document
   {
     this.createdUser = this.createdUser;
   }
+
   public void setDate(LocalDate date)
   {
     this.createdDate = date;
@@ -70,14 +74,14 @@ public class Document
     this.description = description;
   }
 
-  public void setFile(String file)
+  public void setFileName(String fileName)
   {
-    this.file = file;
+    this.fileName = fileName;
   }
 
-  public void setPath(String path)
+  public void setContentId(String contentId)
   {
-    this.path = path;
+    this.contentId = contentId;
   }
 
   public String getId()
@@ -120,13 +124,28 @@ public class Document
     return description;
   }
 
-  public String getFile()
+  public String getFileName()
   {
-    return file;
+    return fileName;
   }
 
-  public String getPath()
+  public String getContentId()
   {
-    return path;
+    return contentId;
+  }
+
+  public void setCreatedDate(LocalDate createdDate)
+  {
+    this.createdDate = createdDate;
+  }
+
+  public Resource getFileResource()
+  {
+    return fileResource;
+  }
+
+  public void setFileResource(Resource fileResource)
+  {
+    this.fileResource = fileResource;
   }
 }
