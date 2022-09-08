@@ -30,7 +30,7 @@ project.ext {
           context : "org.springframework:spring-context:${springVersion}",
           test    : "org.springframework:spring-test:${springVersion}",
           security: "org.springframework.security:spring-security-core:${springVersion}",
-          jpa     :"org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
+          jpa     : "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
       ],
       springData   : [
           mongo: "org.springframework.data:spring-data-mongodb:${springDataMongoVersion}"

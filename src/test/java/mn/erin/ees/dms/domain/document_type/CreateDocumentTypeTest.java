@@ -13,7 +13,7 @@ import mn.erin.ees.dms.utilities.CreateDocumentTypeException;
 
 import static org.mockito.Mockito.doReturn;
 
-public class CreateDocumentTypeTest
+class CreateDocumentTypeTest
 {
   private DocumentTypeRepository repository;
   private CreateDocumentType usecase;
