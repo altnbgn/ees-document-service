@@ -6,7 +6,7 @@ import mn.erin.ees.dms.domain.document_type.model.DocumentType;
 
 public interface DocumentTypeRepository
 {
-  DocumentType createDocumentType(String organizationId,
+  DocumentType  createDocumentType(String organizationId,
       String groupId,
       String name,
       String category,

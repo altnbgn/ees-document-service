@@ -15,25 +15,25 @@ import mn.erin.ees.dms.utilities.DocumentGettingException;
 /**
  * @author Altanbagana
  */
-public class GetAllDocumentsByJournalEntryId
+public class GetAllDocumentsByReferrerId
 {
   private final DocumentRepository documentRepository;
 
-  public GetAllDocumentsByJournalEntryId(DocumentRepository documentRepository)
+  public GetAllDocumentsByReferrerId(DocumentRepository documentRepository)
   {
     this.documentRepository = documentRepository;
   }
 
-  public List<DocumentOutput> execute(String journalEntryId)
+  public List<DocumentOutput> execute(String referrerId)
   {
-    if (StringUtils.isBlank(journalEntryId))
+    if (StringUtils.isBlank(referrerId))
     {
       throw new ValidationException("journal entry id is blank");
     }
 
     try
     {
-      List<Document> document = documentRepository.findAllByReferrerId(journalEntryId);
+      List<Document> document = documentRepository.findAllByReferrerId(referrerId);
       ConvertToDocumentOutput documentOutput = new ConvertToDocumentOutput();
       return document.stream().map(documentOutput::convertToDocumentOutput).collect(Collectors.toList());
     }

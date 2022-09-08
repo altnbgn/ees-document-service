@@ -19,17 +19,18 @@ public class Document
   private String referrerId;
   private Resource resource;
 
-  public Document(String id, String organizationId, String groupId, String documentName, String createdUser, String documentType,
-      LocalDate date, String referrerId, Resource resource)
+  public Document(String id, String documentName, String organizationId, String groupId, String createdUser, String documentType,
+      LocalDate date, String referrerId, String description, Resource resource)
   {
     this.id = id;
+    this.documentName = Validate.notBlank(documentName);
     this.organizationId = Validate.notBlank(organizationId);
     this.groupId = Validate.notBlank(groupId);
-    this.documentName = Validate.notBlank(documentName);
     this.documentType = Validate.notBlank(documentType);
     this.createdUser = Validate.notBlank(createdUser);
     this.createdDate = Validate.notNull(date);
     this.referrerId = Validate.notBlank(referrerId);
+    this.description = description;
     this.resource = resource;
   }
 

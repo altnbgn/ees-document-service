@@ -32,8 +32,8 @@ public class CreateDocument
 
     try
     {
-      return documentRepository.upload(new Document(null, input.getOrganizationId(), input.getGroupId(), input.getDocumentName(),
-          input.getCreatedUser(), input.getDocumentTypeId(), input.getCreatedDate(), input.getJournalEntryId(), input.getFile().getResource()));
+      return documentRepository.upload(new Document(null, input.getDocumentName(), input.getOrganizationId(), input.getGroupId(),
+          input.getCreatedUser(), input.getDocumentTypeId(), input.getCreatedDate(), input.getJournalEntryId(), input.getDescription(), input.getFile().getResource()));
     }
     catch (IOException e)
     {

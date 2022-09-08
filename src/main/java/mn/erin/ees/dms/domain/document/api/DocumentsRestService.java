@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import mn.erin.ees.dms.domain.document.model.Document;
 import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
 import mn.erin.ees.dms.domain.document.usecase.CreateDocument;
-import mn.erin.ees.dms.domain.document.usecase.GetAllDocumentsByJournalEntryId;
+import mn.erin.ees.dms.domain.document.usecase.DownloadDocument;
+import mn.erin.ees.dms.domain.document.usecase.GetAllDocumentsByReferrerId;
 import mn.erin.ees.dms.domain.document.usecase.GetDocument;
 import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 import mn.erin.ees.dms.rest.DocumentApiDelegate;
@@ -55,7 +57,21 @@ public class DocumentsRestService implements DocumentApiDelegate
   }
 
   @Override
-  public ResponseEntity<DocumentOutputResponseRestModel> downloadDocument(String journalEntryId, String name)
+  public ResponseEntity<Resource> downloadDocument(String contentId)
+  {
+    DownloadDocument downloadDocument = new DownloadDocument(documentRepository);
+    try
+    {
+      return ResponseEntity.ok(downloadDocument.execute(contentId));
+    }
+    catch (DocumentCreationException e)
+    {
+      return ResponseEntity.internalServerError().body(null);
+    }
+  }
+
+  @Override
+  public ResponseEntity<DocumentOutputResponseRestModel> getDocument(String journalEntryId, String name)
   {
     GetDocument getDocument = new GetDocument(documentRepository);
     return ResponseEntity.ok(
@@ -63,10 +79,10 @@ public class DocumentsRestService implements DocumentApiDelegate
   }
 
   @Override
-  public ResponseEntity<DocumentOutputsRestModel> downloadAllDocuments(String journalEntryId)
+  public ResponseEntity<DocumentOutputsRestModel> getAllDocuments(String journalEntryId)
   {
     return ResponseEntity.ok(new DocumentOutputsRestModel().documentOutputs(
-        new GetAllDocumentsByJournalEntryId(documentRepository).execute(journalEntryId).stream().map(this::convertToDocumentOutputRestModel)
+        new GetAllDocumentsByReferrerId(documentRepository).execute(journalEntryId).stream().map(this::convertToDocumentOutputRestModel)
             .collect(Collectors.toList())));
   }
 

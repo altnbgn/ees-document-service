@@ -10,11 +10,11 @@ public class AlfrescoConstants
   public static final String ERIN_ROOT = "/ees/";
   public static final String ALFRESCO_ROOT = "-root-";
 
-  public static final String ORGANIZATION_ID = "organizationId";
-  public static final String GROUP_ID = "groupId";
-  public static final String CREATED_DATE = "createdDate";
-  public static final String CREATED_USER = "createdUser";
-  public static final String DESCRIPTION = "description";
-  public static final String REFERRER_ID = "referrerId";
-  public static final String DOCUMENT_TYPE = "documentType";
+  public static final String ORGANIZATION_ID = "erin:organizationId";
+  public static final String GROUP_ID = "erin:groupId";
+  public static final String CREATED_DATE = "erin:createdDate";
+  public static final String CREATED_USER = "erin:createdUser";
+  public static final String DESCRIPTION = "erin:description";
+  public static final String REFERRER_ID = "erin:sourceObjectId";
+  public static final String DOCUMENT_TYPE = "erin:documentType";
 }

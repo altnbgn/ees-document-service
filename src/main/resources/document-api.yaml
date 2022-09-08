@@ -8,10 +8,32 @@ servers:
   - url: /documentApi
 
 paths:
+  /document/download/{contentId}:
+    get:
+      summary: download Document
+      operationId: downloadDocument
+      tags:
+        - Document
+      parameters:
+        - name: contentId
+          in: path
+          description: Id of content
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Document download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
   /document/get/{referrerId}:
     get:
       summary: returns all documents
-      operationId: downloadAllDocuments
+      operationId: getAllDocuments
       tags:
         - Document
       parameters:
@@ -31,8 +53,8 @@ paths:
 
   /document/get/{referrerId}/{name}:
     get:
-      summary: returns all documents
-      operationId: downloadDocument
+      summary: returns a document
+      operationId: getDocument
       tags:
         - Document
       parameters:

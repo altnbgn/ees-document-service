@@ -13,7 +13,7 @@ public class ConvertToDocumentOutput
     return new DocumentOutput(
         document.getDocumentName(),
         document.getDocumentType(),
-        document.getContentId()
+        document.getId()
     );
   }
 }

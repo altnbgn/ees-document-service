@@ -158,7 +158,8 @@ public class DocumentRepositoryAlfrescoImpl implements DocumentRepository
 
   private List<NodeChildAssociationEntry> listNodeChildren(String parentId) throws DocumentGettingException
   {
-    ResponseEntity<NodeChildAssociationPaging> responseEntity = nodesApi.listNodeChildren(parentId, null, 50000, null, null, null, null, null, null);
+    String[] include = {"properties"};
+    ResponseEntity<NodeChildAssociationPaging> responseEntity = nodesApi.listNodeChildren(parentId, null, 50000, null, null, List.of(include), null, null, null);
     if (responseEntity.getStatusCode() != HttpStatus.OK)
     {
       throw new DocumentGettingException(ExceptionReason.NOT_FOUND, "document not found!");
@@ -206,17 +207,18 @@ public class DocumentRepositoryAlfrescoImpl implements DocumentRepository
 
   private Document convertToDocument(NodeChildAssociation node, Resource resource)
   {
-    //TODO fix unchecked or unsafe operations
+    //TODO: fix unchecked or unsafe operations
     Map<String, String> properties = (Map<String, String>) node.getProperties();
     return new Document(
         node.getId(),
+        node.getName(),
         properties.get(AlfrescoConstants.ORGANIZATION_ID),
         properties.get(AlfrescoConstants.GROUP_ID),
-        node.getName(),
         properties.get(AlfrescoConstants.CREATED_USER),
         properties.get(AlfrescoConstants.DOCUMENT_TYPE),
         LocalDate.parse(properties.get(AlfrescoConstants.CREATED_DATE)),
         properties.get(AlfrescoConstants.REFERRER_ID),
+        properties.get(AlfrescoConstants.DESCRIPTION),
         resource);
   }
 }
