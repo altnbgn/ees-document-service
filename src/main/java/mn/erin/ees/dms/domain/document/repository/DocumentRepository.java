@@ -13,11 +13,11 @@ public interface DocumentRepository
 {
   String upload(Document document) throws DocumentCreationException, IOException;
 
-  Document findByReferrerIdAndName(String referrerId, String name) throws DocumentGettingException, DocumentCreationException;
+  Document findByReferrerIdAndName(String referrerId, String name) throws DocumentGettingException;
 
   List<Document> findAllByReferrerId(String referrerId) throws DocumentGettingException;
 
-  Resource downloadByContentId(String contentId) throws DocumentCreationException, DocumentGettingException;
+  Resource downloadByContentId(String contentId);
 
   public void deleteById(String contentId);
 }

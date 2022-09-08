@@ -3,7 +3,6 @@ package mn.erin.ees.dms.domain.document.usecase;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.ValidationException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,6 +10,7 @@ import mn.erin.ees.dms.domain.document.api.DocumentOutput;
 import mn.erin.ees.dms.domain.document.model.Document;
 import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
 import mn.erin.ees.dms.utilities.DocumentGettingException;
+import mn.erin.ees.dms.utilities.ExceptionReason;
 
 /**
  * @author Altanbagana
@@ -24,11 +24,11 @@ public class GetAllDocumentsByReferrerId
     this.documentRepository = documentRepository;
   }
 
-  public List<DocumentOutput> execute(String referrerId)
+  public List<DocumentOutput> execute(String referrerId) throws DocumentGettingException
   {
     if (StringUtils.isBlank(referrerId))
     {
-      throw new ValidationException("journal entry id is blank");
+      throw new DocumentGettingException(ExceptionReason.INPUT_INVALID, "referrer id is blank");
     }
 
     try

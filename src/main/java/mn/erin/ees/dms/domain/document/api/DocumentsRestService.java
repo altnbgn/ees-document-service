@@ -25,6 +25,7 @@ import mn.erin.ees.dms.rest.model.DocumentOutputsRestModel;
 import mn.erin.ees.dms.rest.model.DocumentRestModel;
 import mn.erin.ees.dms.rest.model.ErrorRestModel;
 import mn.erin.ees.dms.utilities.DocumentCreationException;
+import mn.erin.ees.dms.utilities.DocumentGettingException;
 
 @Component
 @Service
@@ -64,7 +65,7 @@ public class DocumentsRestService implements DocumentApiDelegate
     {
       return ResponseEntity.ok(downloadDocument.execute(contentId));
     }
-    catch (DocumentCreationException e)
+    catch (DocumentGettingException e)
     {
       return ResponseEntity.internalServerError().body(null);
     }
@@ -74,16 +75,30 @@ public class DocumentsRestService implements DocumentApiDelegate
   public ResponseEntity<DocumentOutputResponseRestModel> getDocument(String journalEntryId, String name)
   {
     GetDocument getDocument = new GetDocument(documentRepository);
-    return ResponseEntity.ok(
-        new DocumentOutputResponseRestModel().documentOutput(convertToDocumentOutputRestModel(getDocument.execute(journalEntryId, name))));
+    try
+    {
+      return ResponseEntity.ok(
+          new DocumentOutputResponseRestModel().documentOutput(convertToDocumentOutputRestModel(getDocument.execute(journalEntryId, name))));
+    }
+    catch (DocumentGettingException e)
+    {
+      return ResponseEntity.internalServerError().body(new DocumentOutputResponseRestModel().error(new ErrorRestModel().message(e.getMessage())));
+    }
   }
 
   @Override
   public ResponseEntity<DocumentOutputsRestModel> getAllDocuments(String journalEntryId)
   {
-    return ResponseEntity.ok(new DocumentOutputsRestModel().documentOutputs(
-        new GetAllDocumentsByReferrerId(documentRepository).execute(journalEntryId).stream().map(this::convertToDocumentOutputRestModel)
-            .collect(Collectors.toList())));
+    try
+    {
+      return ResponseEntity.ok(new DocumentOutputsRestModel().documentOutputs(
+          new GetAllDocumentsByReferrerId(documentRepository).execute(journalEntryId).stream().map(this::convertToDocumentOutputRestModel)
+              .collect(Collectors.toList())));
+    }
+    catch (DocumentGettingException e)
+    {
+      return ResponseEntity.internalServerError().body(new DocumentOutputsRestModel().error(new ErrorRestModel().message(e.getMessage())));
+    }
   }
 
   private DocumentRestModel convertToDocumentRestModel(Document document)

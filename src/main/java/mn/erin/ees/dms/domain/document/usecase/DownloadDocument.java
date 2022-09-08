@@ -1,9 +1,10 @@
 package mn.erin.ees.dms.domain.document.usecase;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.Resource;
 
 import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
-import mn.erin.ees.dms.utilities.DocumentCreationException;
+import mn.erin.ees.dms.utilities.DocumentGettingException;
 import mn.erin.ees.dms.utilities.ExceptionReason;
 
 public class DownloadDocument
@@ -15,19 +16,12 @@ public class DownloadDocument
     this.documentRepository = documentRepository;
   }
 
-  public Resource execute(String contentId) throws DocumentCreationException
+  public Resource execute(String contentId) throws DocumentGettingException
   {
-    Resource resource;
-
-    try
+    if (StringUtils.isBlank(contentId))
     {
-      resource = documentRepository.downloadByContentId(contentId);
+      throw new DocumentGettingException(ExceptionReason.INPUT_INVALID, "content id required!");
     }
-    catch (Exception e)
-    {
-      throw new DocumentCreationException(ExceptionReason.NOT_FOUND, e.getMessage());
-    }
-
-    return resource;
+    return documentRepository.downloadByContentId(contentId);
   }
 }

@@ -1,8 +1,11 @@
 package mn.erin.ees.dms.domain.document.usecase;
 
+import org.apache.commons.lang3.StringUtils;
+
 import mn.erin.ees.dms.domain.document.api.DocumentOutput;
-import mn.erin.ees.dms.domain.document.model.Document;
 import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
+import mn.erin.ees.dms.utilities.DocumentGettingException;
+import mn.erin.ees.dms.utilities.ExceptionReason;
 
 public class GetDocument
 {
@@ -13,17 +16,18 @@ public class GetDocument
     this.documentRepository = documentRepository;
   }
 
-  public DocumentOutput execute(String journalEntryId, String name)
+  public DocumentOutput execute(String referrerId, String name) throws DocumentGettingException
   {
-    Document document;
-    try
+    if (StringUtils.isBlank(referrerId))
     {
-      document = documentRepository.findByReferrerIdAndName(journalEntryId, name);
+      throw new DocumentGettingException(ExceptionReason.INPUT_INVALID, "referred id is invalid");
     }
-    catch (Exception e)
+
+    if (StringUtils.isBlank(referrerId))
     {
-      throw new RuntimeException(e);
+      throw new DocumentGettingException(ExceptionReason.INPUT_INVALID, "name is invalid");
     }
-    return new DocumentOutput(document.getDocumentName(), document.getDocumentType(), document.getContentId());
+
+    return new ConvertToDocumentOutput().convertToDocumentOutput(documentRepository.findByReferrerIdAndName(referrerId, name));
   }
 }
