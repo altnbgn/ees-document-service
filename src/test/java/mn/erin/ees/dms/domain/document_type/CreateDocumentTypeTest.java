@@ -16,7 +16,7 @@ import static org.mockito.Mockito.doReturn;
 class CreateDocumentTypeTest
 {
   private DocumentTypeRepository repository;
-  private CreateDocumentType usecase;
+  private CreateDocumentType createDocumentType;
 
   @BeforeEach
   void setup()
@@ -24,7 +24,7 @@ class CreateDocumentTypeTest
     repository = Mockito.mock(DocumentTypeRepository.class);
     DocumentType dummy = new DocumentType("123", "a", "b", "d", "s");
     doReturn(dummy).when(repository).createDocumentType(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
-    usecase = new CreateDocumentType(repository);
+    createDocumentType = new CreateDocumentType(repository);
   }
 
   @Test
@@ -32,7 +32,7 @@ class CreateDocumentTypeTest
   {
     DocumentTypeInput input = new DocumentTypeInput(" ", "b", "c", "d", "e");
     Assertions.assertThrows(CreateDocumentTypeException.class, () -> {
-      usecase.execute(input);
+      createDocumentType.execute(input);
     });
   }
 
@@ -41,7 +41,7 @@ class CreateDocumentTypeTest
   {
     DocumentTypeInput input = new DocumentTypeInput("a", "", "c", "d", "e");
     Assertions.assertThrows(CreateDocumentTypeException.class, () -> {
-      usecase.execute(input);
+      createDocumentType.execute(input);
     });
   }
 
@@ -50,7 +50,7 @@ class CreateDocumentTypeTest
   {
     DocumentTypeInput input = new DocumentTypeInput("a", "b", "", "d", "e");
     Assertions.assertThrows(CreateDocumentTypeException.class, () -> {
-      usecase.execute(input);
+      createDocumentType.execute(input);
     });
   }
 
@@ -59,7 +59,7 @@ class CreateDocumentTypeTest
   {
     DocumentTypeInput input = new DocumentTypeInput("a", "b", "c", " ", "e");
     Assertions.assertThrows(CreateDocumentTypeException.class, () -> {
-      usecase.execute(input);
+      createDocumentType.execute(input);
     });
   }
 
@@ -69,7 +69,7 @@ class CreateDocumentTypeTest
     doReturn(true).when(repository).hasDocumentTypeWithName("c");
     DocumentTypeInput input = new DocumentTypeInput("a", "b", "c", "d", "e");
     Assertions.assertThrows(CreateDocumentTypeException.class, () -> {
-      usecase.execute(input);
+      createDocumentType.execute(input);
     });
   }
 
@@ -77,7 +77,7 @@ class CreateDocumentTypeTest
   void creates_document_type() throws Exception
   {
     DocumentTypeInput input = new DocumentTypeInput("a", "b", "c", "d", " ");
-    usecase.execute(input);
+    createDocumentType.execute(input);
     Mockito.verify(repository).createDocumentType("a", "b", "c", "d", " ");
   }
 
@@ -85,7 +85,7 @@ class CreateDocumentTypeTest
   void name_is_trimed() throws Exception
   {
     DocumentTypeInput input = new DocumentTypeInput("a", "b", " c ", "d", " ");
-    usecase.execute(input);
+    createDocumentType.execute(input);
     Mockito.verify(repository).createDocumentType("a", "b", "c", "d", " ");
   }
 }
