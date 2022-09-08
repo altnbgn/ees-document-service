@@ -6,17 +6,18 @@ import java.util.List;
 import org.springframework.core.io.Resource;
 
 import mn.erin.ees.dms.domain.document.model.Document;
-import mn.erin.ees.dms.domain.document.model.DocumentInput;
-import mn.erin.ees.dms.domain.document_type.model.DocumentType;
 import mn.erin.ees.dms.utilities.DocumentCreationException;
+import mn.erin.ees.dms.utilities.DocumentGettingException;
 
 public interface DocumentRepository
 {
-  String fileSave(DocumentInput input, DocumentType documentType) throws DocumentCreationException, IOException;
+  String upload(Document document) throws DocumentCreationException, IOException;
 
-  List<Document> get(String organizationId, String groupId);
+  Document findByReferrerIdAndName(String referrerId, String name) throws DocumentGettingException, DocumentCreationException;
 
-  Resource fileDownload(String contentId) throws DocumentCreationException;
+  List<Document> findAllByReferrerId(String referrerId) throws DocumentGettingException;
+
+  Resource downloadByContentId(String contentId) throws DocumentCreationException, DocumentGettingException;
 
   public void deleteById(String contentId);
 }

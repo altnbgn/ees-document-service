@@ -1,4 +1,4 @@
-package mn.erin.ees.dms.domain.document.model;
+package mn.erin.ees.dms.domain.document.api;
 
 import java.time.LocalDate;
 
@@ -10,16 +10,14 @@ public class DocumentInput
   private String groupId;
   private String documentName;
   private String createdUser;
-
   private String documentTypeId;
   private LocalDate createdDate;
-
   private String description;
-
+  private String journalEntryId;
   private MultipartFile file;
 
   public DocumentInput(String organizationId, String groupId, String documentName, String createdUser, String documentTypeId, LocalDate createdDate,
-      String description, MultipartFile file)
+      String description, String journalEntryId, MultipartFile file)
   {
     this.organizationId = organizationId;
     this.groupId = groupId;
@@ -28,6 +26,7 @@ public class DocumentInput
     this.documentTypeId = documentTypeId;
     this.createdDate = createdDate;
     this.description = description;
+    this.journalEntryId = journalEntryId;
     this.file = file;
   }
 
@@ -104,6 +103,16 @@ public class DocumentInput
   public MultipartFile getFile()
   {
     return file;
+  }
+
+  public String getJournalEntryId()
+  {
+    return journalEntryId;
+  }
+
+  public void setJournalEntryId(String journalEntryId)
+  {
+    this.journalEntryId = journalEntryId;
   }
 
   public void setFile(MultipartFile file)

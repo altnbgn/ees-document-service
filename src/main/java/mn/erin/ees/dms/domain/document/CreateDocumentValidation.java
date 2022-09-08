@@ -2,7 +2,7 @@ package mn.erin.ees.dms.domain.document;
 
 import org.apache.commons.lang3.StringUtils;
 
-import mn.erin.ees.dms.domain.document.model.DocumentInput;
+import mn.erin.ees.dms.domain.document.api.DocumentInput;
 import mn.erin.ees.dms.utilities.DocumentCreationException;
 import mn.erin.ees.dms.utilities.ExceptionReason;
 
@@ -36,6 +36,10 @@ public class CreateDocumentValidation
     if (StringUtils.isBlank(input.getDescription()))
     {
       throw new DocumentCreationException(ExceptionReason.INPUT_INVALID, "Document description is missing");
+    }
+    if (StringUtils.isBlank(input.getJournalEntryId()))
+    {
+      throw new DocumentCreationException(ExceptionReason.INPUT_INVALID, "Journal entry id is missing");
     }
   }
 }

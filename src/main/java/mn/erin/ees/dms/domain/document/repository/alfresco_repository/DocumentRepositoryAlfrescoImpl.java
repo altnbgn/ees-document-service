@@ -1,28 +1,34 @@
 package mn.erin.ees.dms.domain.document.repository.alfresco_repository;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import org.openapitools.client.ApiException;
-import org.openapitools.client.api.ActionsApi;
-import org.openapitools.client.api.NodesApi;
-import org.openapitools.client.model.Node;
-import org.openapitools.client.model.NodeBodyCreate;
-import org.springframework.core.io.ByteArrayResource;
+import org.alfresco.core.handler.NodesApi;
+import org.alfresco.core.handler.QueriesApi;
+import org.alfresco.core.model.Node;
+import org.alfresco.core.model.NodeBodyCreate;
+import org.alfresco.core.model.NodeChildAssociation;
+import org.alfresco.core.model.NodeChildAssociationEntry;
+import org.alfresco.core.model.NodeChildAssociationPaging;
+import org.alfresco.core.model.NodeEntry;
+import org.alfresco.core.model.NodePaging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import mn.erin.ees.dms.domain.document.model.Document;
-import mn.erin.ees.dms.domain.document.model.DocumentInput;
 import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
-import mn.erin.ees.dms.domain.document_type.model.DocumentType;
-import mn.erin.ees.dms.utilities.AlfrescoNodeConstants;
+import mn.erin.ees.dms.utilities.AlfrescoConstants;
 import mn.erin.ees.dms.utilities.DocumentCreationException;
+import mn.erin.ees.dms.utilities.DocumentGettingException;
 import mn.erin.ees.dms.utilities.ExceptionReason;
 
 /**
@@ -33,52 +39,70 @@ import mn.erin.ees.dms.utilities.ExceptionReason;
 public class DocumentRepositoryAlfrescoImpl implements DocumentRepository
 {
   private final NodesApi nodesApi;
-  private final ActionsApi actionsApi;
+  private final QueriesApi queriesApi;
 
-  public DocumentRepositoryAlfrescoImpl()
+  @Autowired
+  public DocumentRepositoryAlfrescoImpl(NodesApi nodesApi, QueriesApi queriesApi)
   {
-    this.nodesApi = new AlfrescoClient().getNodesApi();
-
-    this.actionsApi = new AlfrescoClient().getActionsApi();
+    this.nodesApi = nodesApi;
+    this.queriesApi = queriesApi;
   }
 
   @Override
-  public String fileSave(DocumentInput input, DocumentType documentType) throws DocumentCreationException
+  public String upload(Document document) throws DocumentCreationException
   {
-    Node createdNode = createNode(input, documentType);
+    Node createdNode = createNode(document);
+    ResponseEntity<NodeEntry> responseEntity;
     try
     {
-      nodesApi.updateNodeContent(createdNode.getId(), convertToFile(input.getFile()), null, null, null, null, null);
+      responseEntity = nodesApi.updateNodeContent(createdNode.getId(), document.getResource().getInputStream().readAllBytes(), null, null, null, null, null);
     }
-    catch (ApiException e)
+    catch (IOException e)
     {
-      throw new DocumentCreationException(ExceptionReason.NOT_SAVE_FILE, "Api exception");
+      throw new DocumentCreationException(ExceptionReason.NOT_SAVE_FILE, e.getMessage());
     }
 
+    if (responseEntity.getStatusCode() != HttpStatus.OK)
+    {
+      throw new DocumentCreationException(ExceptionReason.NOT_SAVE_FILE, "Not saved file");
+    }
     return createdNode.getId();
   }
 
   @Override
-  public List<Document> get(String organizationId, String groupId)
+  public Document findByReferrerIdAndName(String referrerId, String name) throws DocumentGettingException
   {
-    return null;
+    String folderId = findNodeIdByNameAndType(referrerId, AlfrescoConstants.FOLDER);
+    NodeChildAssociation node = findChildNode(folderId, name);
+    if (node == null)
+    {
+      throw new DocumentGettingException(ExceptionReason.NOT_FOUND, name + " was not found in the folder with the ID: [" + folderId + "]");
+    }
+
+    return convertToDocument(node, downloadByContentId(node.getId()));
   }
 
   @Override
-  public Resource fileDownload(String contentId) throws DocumentCreationException
+  public List<Document> findAllByReferrerId(String referrerId) throws DocumentGettingException
   {
-    try
+    String folderId = findNodeIdByNameAndType(referrerId, AlfrescoConstants.FOLDER);
+    List<NodeChildAssociationEntry> nodeChildAssociationEntries = listNodeChildren(folderId);
+
+    return nodeChildAssociationEntries.stream().map(
+            nodeChildAssociationEntry -> convertToDocument(nodeChildAssociationEntry.getEntry(), downloadByContentId(nodeChildAssociationEntry.getEntry().getId())))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public Resource downloadByContentId(String contentId)
+  {
+    ResponseEntity<Resource> responseEntity = nodesApi.getNodeContent(contentId, null, null, null);
+    if (responseEntity.getStatusCode() != HttpStatus.OK)
     {
-      return new ByteArrayResource(Files.readAllBytes(nodesApi.getNodeContent(contentId, null, null, null).toPath()));
+      return null;
     }
-    catch (ApiException e)
-    {
-      throw new DocumentCreationException(ExceptionReason.CANNOT_USE_API, "cannot use api");
-    }
-    catch (IOException e)
-    {
-      throw new DocumentCreationException(ExceptionReason.NOT_FOUND, "cannot read bytes from file");
-    }
+
+    return responseEntity.getBody();
   }
 
   @Override
@@ -87,44 +111,112 @@ public class DocumentRepositoryAlfrescoImpl implements DocumentRepository
 
   }
 
-  Node createNode(DocumentInput input, DocumentType documentType) throws DocumentCreationException
+  private Node createNode(Document document) throws DocumentCreationException
   {
-    try
+    ResponseEntity<NodeEntry> responseEntity = nodesApi.createNode(
+        AlfrescoConstants.ALFRESCO_ROOT,
+        new NodeBodyCreate()
+            .properties(setProperties(document))
+            .name(document.getDocumentName())
+            .nodeType(AlfrescoConstants.CONTENT)
+            .relativePath(
+                AlfrescoConstants.ERIN_ROOT +
+                    document.getOrganizationId() + "/" +
+                    document.getGroupId() + "/" +
+                    document.getCreatedDate().getYear() + "/" +
+                    document.getCreatedDate().getMonthValue() + "/" +
+                    document.getReferrerId()),
+        null, null, null, null, null);
+
+    if (responseEntity.getStatusCode() != HttpStatus.CREATED)
     {
-      return nodesApi.createNode(
-              AlfrescoNodeConstants.ALFRESCO_ROOT,
-              new NodeBodyCreate()
-                  .name(input.getDocumentName())
-                  .nodeType(AlfrescoNodeConstants.CONTENT)
-                  .relativePath(
-                      AlfrescoNodeConstants.ERIN_ROOT +
-                          input.getOrganizationId() + "/" +
-                          input.getGroupId() + "/" +
-                          input.getCreatedDate().getYear() + "/" +
-                          input.getCreatedDate().getMonthValue() + "/" +
-                          documentType.getName()),
-              null, null, null, null, null)
-          .getEntry();
+      throw new DocumentCreationException(ExceptionReason.NOT_SAVE_FILE, "Failed to save a file");
     }
-    catch (ApiException e)
+
+    if (!responseEntity.hasBody())
     {
-      throw new DocumentCreationException(ExceptionReason.NOT_SAVE_FILE, e.getMessage());
+      throw new DocumentCreationException(ExceptionReason.NOT_SAVE_FILE, "Response entity has no body!");
     }
+
+    return Objects.requireNonNull(responseEntity.getBody()).getEntry();
   }
 
-  File convertToFile(MultipartFile multipartFile) throws DocumentCreationException
+  private NodeChildAssociation findChildNode(String parentId, String childName) throws DocumentGettingException
   {
-    File file = new File(multipartFile.getName());
-    try (OutputStream os = new FileOutputStream(file))
+    List<NodeChildAssociationEntry> nodeChildAssociationEntries = listNodeChildren(parentId);
+
+    for (NodeChildAssociationEntry entry : nodeChildAssociationEntries)
     {
-      os.write(multipartFile.getBytes());
+      if (childName.equals(entry.getEntry().getName()))
+      {
+        return entry.getEntry();
+      }
     }
 
-    catch (IOException e)
+    return null;
+  }
+
+  private List<NodeChildAssociationEntry> listNodeChildren(String parentId) throws DocumentGettingException
+  {
+    ResponseEntity<NodeChildAssociationPaging> responseEntity = nodesApi.listNodeChildren(parentId, null, 50000, null, null, null, null, null, null);
+    if (responseEntity.getStatusCode() != HttpStatus.OK)
     {
-      throw new DocumentCreationException(ExceptionReason.NOT_SAVE_FILE, e.getMessage());
+      throw new DocumentGettingException(ExceptionReason.NOT_FOUND, "document not found!");
     }
-    file.deleteOnExit();
-    return file;
+
+    NodeChildAssociationPaging nodeChildAssociationPaging = responseEntity.getBody();
+
+    if (nodeChildAssociationPaging == null || nodeChildAssociationPaging.getList() == null)
+    {
+      return Collections.emptyList();
+    }
+
+    return nodeChildAssociationPaging.getList().getEntries();
+  }
+
+  private String findNodeIdByNameAndType(String name, String type) throws DocumentGettingException
+  {
+    ResponseEntity<NodePaging> responseEntity = queriesApi.findNodes(name, null, null, null, type, null, null, null);
+
+    if (responseEntity.getStatusCode() != HttpStatus.OK)
+    {
+      throw new DocumentGettingException(ExceptionReason.NOT_FOUND, "Not found file");
+    }
+
+    if (!responseEntity.hasBody())
+    {
+      throw new DocumentGettingException(ExceptionReason.NOT_FOUND, "response entity has no body");
+    }
+
+    return Objects.requireNonNull(responseEntity.getBody()).getList().getEntries().get(0).getEntry().getId();
+  }
+
+  private Map<String, String> setProperties(Document document)
+  {
+    Map<String, String> properties = new HashMap<>();
+    properties.put(AlfrescoConstants.ORGANIZATION_ID, document.getOrganizationId());
+    properties.put(AlfrescoConstants.GROUP_ID, document.getGroupId());
+    properties.put(AlfrescoConstants.CREATED_DATE, document.getCreatedDate().toString());
+    properties.put(AlfrescoConstants.CREATED_USER, document.getCreatedUser());
+    properties.put(AlfrescoConstants.DESCRIPTION, document.getDescription());
+    properties.put(AlfrescoConstants.REFERRER_ID, document.getReferrerId());
+    properties.put(AlfrescoConstants.DOCUMENT_TYPE, document.getDocumentType());
+    return properties;
+  }
+
+  private Document convertToDocument(NodeChildAssociation node, Resource resource)
+  {
+    //TODO fix unchecked or unsafe operations
+    Map<String, String> properties = (Map<String, String>) node.getProperties();
+    return new Document(
+        node.getId(),
+        properties.get(AlfrescoConstants.ORGANIZATION_ID),
+        properties.get(AlfrescoConstants.GROUP_ID),
+        node.getName(),
+        properties.get(AlfrescoConstants.CREATED_USER),
+        properties.get(AlfrescoConstants.DOCUMENT_TYPE),
+        LocalDate.parse(properties.get(AlfrescoConstants.CREATED_DATE)),
+        properties.get(AlfrescoConstants.REFERRER_ID),
+        resource);
   }
 }

@@ -11,28 +11,27 @@ public class Document
   private String organizationId;
   private String groupId;
   private String documentName;
-  private String type;
+  private String documentType;
+  private String contentId;
   private String createdUser;
   private LocalDate createdDate;
-  private String fileName;
-  private String contentId;
   private String description;
-  private Resource fileResource;
+  private String referrerId;
+  private Resource resource;
 
   public Document(String id, String organizationId, String groupId, String documentName, String createdUser, String documentType,
-      LocalDate date, String fileName, String contentId)
+      LocalDate date, String referrerId, Resource resource)
   {
-    this.id = Validate.notBlank(id);
+    this.id = id;
     this.organizationId = Validate.notBlank(organizationId);
     this.groupId = Validate.notBlank(groupId);
     this.documentName = Validate.notBlank(documentName);
-    this.type = Validate.notBlank(documentType);
+    this.documentType = Validate.notBlank(documentType);
     this.createdUser = Validate.notBlank(createdUser);
-    this.fileName = Validate.notBlank(fileName);
-    this.contentId = Validate.notBlank(contentId);
     this.createdDate = Validate.notNull(date);
+    this.referrerId = Validate.notBlank(referrerId);
+    this.resource = resource;
   }
-
 
   public void setId(String id)
   {
@@ -54,9 +53,9 @@ public class Document
     this.documentName = documentName;
   }
 
-  public void setType(String type)
+  public void setDocumentType(String documentType)
   {
-    this.type = type;
+    this.documentType = documentType;
   }
 
   public void setCreatedUser(String createdUser)
@@ -72,16 +71,6 @@ public class Document
   public void setDescription(String description)
   {
     this.description = description;
-  }
-
-  public void setFileName(String fileName)
-  {
-    this.fileName = fileName;
-  }
-
-  public void setContentId(String contentId)
-  {
-    this.contentId = contentId;
   }
 
   public String getId()
@@ -104,9 +93,9 @@ public class Document
     return documentName;
   }
 
-  public String getType()
+  public String getDocumentType()
   {
-    return type;
+    return documentType;
   }
 
   public String getCreatedUser()
@@ -124,14 +113,14 @@ public class Document
     return description;
   }
 
-  public String getFileName()
+  public String getReferrerId()
   {
-    return fileName;
+    return referrerId;
   }
 
-  public String getContentId()
+  public void setReferrerId(String referrerId)
   {
-    return contentId;
+    this.referrerId = referrerId;
   }
 
   public void setCreatedDate(LocalDate createdDate)
@@ -139,13 +128,28 @@ public class Document
     this.createdDate = createdDate;
   }
 
-  public Resource getFileResource()
+  public Resource getResource()
   {
-    return fileResource;
+    return resource;
   }
 
-  public void setFileResource(Resource fileResource)
+  public void setFileResource(Resource fileBytes)
   {
-    this.fileResource = fileResource;
+    this.resource = fileBytes;
+  }
+
+  public String getContentId()
+  {
+    return contentId;
+  }
+
+  public void setContentId(String contentId)
+  {
+    this.contentId = contentId;
+  }
+
+  public void setResource(Resource resource)
+  {
+    this.resource = resource;
   }
 }

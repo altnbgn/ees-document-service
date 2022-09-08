@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import mn.erin.ees.dms.domain.document_type.model.DocumentType;
 import mn.erin.ees.dms.domain.document_type.model.DocumentTypeInput;
@@ -20,11 +21,12 @@ import mn.erin.ees.dms.rest.model.GenericErrorRestModel;
 import mn.erin.ees.dms.utilities.CreateDocumentTypeException;
 
 @Component
+@Service
 public class DocumentTypeRestService implements DocumentTypeApiDelegate
 {
-  private final DocumentTypeRepository documentTypeRepository;
+  private DocumentTypeRepository documentTypeRepository;
 
-  public DocumentTypeRestService(DocumentTypeRepository documentTypeRepository)
+  public DocumentTypeRestService(/*DocumentTypeRepository documentTypeRepository*/)
   {
     this.documentTypeRepository = documentTypeRepository;
   }
@@ -72,8 +74,6 @@ public class DocumentTypeRestService implements DocumentTypeApiDelegate
     return new DocumentTypeRestModel()
         .id(type.getId())
         .createdBy(type.getCreatedBy())
-        .organizationId(type.getOrganizationId())
-        .groupId(type.getGroupId())
         .category(type.getCategory())
         .name(type.getName())
         .description(type.getDescription());

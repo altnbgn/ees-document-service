@@ -7,9 +7,9 @@ import org.mockito.Mockito;
 
 import mn.erin.ees.dms.domain.document_type.model.DocumentType;
 import mn.erin.ees.dms.domain.document_type.model.DocumentTypeInput;
-import mn.erin.ees.dms.utilities.CreateDocumentTypeException;
 import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 import mn.erin.ees.dms.domain.document_type.usecase.CreateDocumentType;
+import mn.erin.ees.dms.utilities.CreateDocumentTypeException;
 
 import static org.mockito.Mockito.doReturn;
 
@@ -22,7 +22,7 @@ public class CreateDocumentTypeTest
   void setup()
   {
     repository = Mockito.mock(DocumentTypeRepository.class);
-    DocumentType dummy = new DocumentType("123", "", " ", "a", "b", "d","s");
+    DocumentType dummy = new DocumentType("123", "a", "b", "d", "s");
     doReturn(dummy).when(repository).createDocumentType(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
     usecase = new CreateDocumentType(repository);
   }
