@@ -1,4 +1,4 @@
-package mn.erin.ees.dms.domain.document.model;
+package mn.erin.ees.dms.domain.document.api;
 
 import java.time.LocalDate;
 
@@ -10,24 +10,23 @@ public class DocumentInput
   private String groupId;
   private String documentName;
   private String createdUser;
-
-  private String documentType;
+  private String documentTypeId;
   private LocalDate createdDate;
-
   private String description;
-
+  private String journalEntryId;
   private MultipartFile file;
 
-  public DocumentInput(String organizationId, String groupId, String documentName, String createdUser, String documentType, LocalDate createdDate,
-      String description, MultipartFile file)
+  public DocumentInput(String organizationId, String groupId, String documentName, String createdUser, String documentTypeId, LocalDate createdDate,
+      String description, String journalEntryId, MultipartFile file)
   {
     this.organizationId = organizationId;
     this.groupId = groupId;
     this.documentName = documentName;
     this.createdUser = createdUser;
-    this.documentType = documentType;
+    this.documentTypeId = documentTypeId;
     this.createdDate = createdDate;
     this.description = description;
+    this.journalEntryId = journalEntryId;
     this.file = file;
   }
 
@@ -71,14 +70,14 @@ public class DocumentInput
     this.createdUser = createdUser;
   }
 
-  public String getDocumentType()
+  public String getDocumentTypeId()
   {
-    return documentType;
+    return documentTypeId;
   }
 
-  public void setDocumentType(String documentType)
+  public void setDocumentTypeId(String documentTypeId)
   {
-    this.documentType = documentType;
+    this.documentTypeId = documentTypeId;
   }
 
   public LocalDate getCreatedDate()
@@ -104,6 +103,16 @@ public class DocumentInput
   public MultipartFile getFile()
   {
     return file;
+  }
+
+  public String getJournalEntryId()
+  {
+    return journalEntryId;
+  }
+
+  public void setJournalEntryId(String journalEntryId)
+  {
+    this.journalEntryId = journalEntryId;
   }
 
   public void setFile(MultipartFile file)

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import mn.erin.ees.dms.domain.document_type.model.DocumentType;
 import mn.erin.ees.dms.domain.document_type.model.DocumentTypeInput;
+import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 import mn.erin.ees.dms.utilities.CreateDocumentTypeException;
 import mn.erin.ees.dms.utilities.ExceptionReason;
 

@@ -8,63 +8,83 @@ servers:
   - url: /documentApi
 
 paths:
-  /document/get/{organizationId}/{groupId}:
+  /document/download/{contentId}:
     get:
-      summary: returns all documents
-      operationId: getDocuments
+      summary: download Document
+      operationId: downloadDocument
       tags:
-        - Documents
-      parameters:
-          - name: organizationId
-            in: path
-            description: ID of the organization
-            required: true
-            schema:
-              type: string
-          - name: groupId
-            in: path
-            description: ID of the group
-            required: true
-            schema:
-              type: string
-      responses:
-        200:
-          description: Document list
-          content:
-            'application/json':
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Document'
-  /document/content/{contentId}:
-    get:
-      summary: return file
-      operationId: getFile
-      tags:
-        - Document Content
+        - Document
       parameters:
         - name: contentId
           in: path
-          description: ID of the content
+          description: Id of content
           required: true
           schema:
             type: string
       responses:
         200:
-          description: Success
+          description: Document download
           content:
-            'application/octet-stream':
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
 
+  /document/get/{referrerId}:
+    get:
+      summary: returns all documents
+      operationId: getAllDocuments
+      tags:
+        - Document
+      parameters:
+        - name: referrerId
+          in: path
+          description: ID of journal entry
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Document list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentOutputs'
 
-  /document/create/{organizationId}/{groupId}/{createdUser}/{documentName}/{documentType}/{createdDate}/{description}:
+  /document/get/{referrerId}/{name}:
+    get:
+      summary: returns a document
+      operationId: getDocument
+      tags:
+        - Document
+      parameters:
+        - name: referrerId
+          in: path
+          description: Referrer id
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          description: name of file
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentOutputResponse'
+
+  /document/create/{organizationId}/{groupId}/{createdUser}/{documentName}/{documentType}/{createdDate}/{description}/{referrerId}:
     post:
       summary: upload documents
-      operationId: createDocument
+      operationId: upload
+      description: Upload a document
       tags:
-        - Documents
+        - Document
       parameters:
         - name: organizationId
           in: path
@@ -80,31 +100,37 @@ paths:
             type: string
         - name: createdUser
           in: path
-          description: ID of the user
+          description: created user of journal entry
           required: true
           schema:
             type: string
         - name: documentName
           in: path
-          description: ID of the organization
+          description: Name of document
           required: true
           schema:
             type: string
         - name: documentType
           in: path
-          description: ID of the group
+          description: type of document
           required: true
           schema:
             type: string
         - name: createdDate
           in: path
-          description: ID of the user
+          description: created date of journal entry
           required: true
           schema:
             type: string
         - name: description
           in: path
-          description: ID of the user
+          description: description
+          required: true
+          schema:
+            type: string
+        - name: referrerId
+          in: path
+          description: Id of journal entry
           required: true
           schema:
             type: string
@@ -119,7 +145,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Document'
+                $ref: '#/components/schemas/DocumentCreationResponse'
         400:
           description: Input data invalid
           content:
@@ -168,17 +194,20 @@ components:
           type: string
         file:
           type: string
+        referrerId:
+          type: string
       required:
-           - id
-           - organizationId
-           - groupId
-           - name
-           - type
-           - createdUser
-           - date
-           - path
-           - description
-           - file
+        - id
+        - organizationId
+        - groupId
+        - name
+        - type
+        - createdUser
+        - date
+        - path
+        - description
+        - file
+        - referrerId
 
 
     DocumentInput:
@@ -186,6 +215,63 @@ components:
       required:
         - file
       properties:
+        file:
+          type: string
+          format: binary
+
+    DocumentOutput:
+      type: object
+      properties:
+        contentId:
+          type: string
+        name:
+          type: string
+        contentTypeId:
+          type: string
+
+    DocumentCreationResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        id:
+          type: string
+          description: created document id
+
+    Documents:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+
+    DocumentOutputResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        documentOutput:
+          $ref: '#/components/schemas/DocumentOutput'
+    DocumentOutputs:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        documentOutputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentOutput'
+
+    GetFileResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+        document:
+          $ref: '#/components/schemas/Document'
         file:
           type: string
           format: binary

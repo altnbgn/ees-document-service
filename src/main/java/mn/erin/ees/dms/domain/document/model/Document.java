@@ -2,31 +2,36 @@ package mn.erin.ees.dms.domain.document.model;
 
 import java.time.LocalDate;
 
+import org.apache.commons.lang3.Validate;
+import org.springframework.core.io.Resource;
+
 public class Document
 {
   private String id;
   private String organizationId;
   private String groupId;
   private String documentName;
-  private String type;
+  private String documentType;
+  private String contentId;
   private String createdUser;
   private LocalDate createdDate;
   private String description;
-  private String file;
-  private String path;
+  private String referrerId;
+  private Resource resource;
 
-  public Document(String id, String organizationId, String groupId, String documentName, String createdUser,String documentType,
-      LocalDate date, String file, String path)
+  public Document(String id, String documentName, String organizationId, String groupId, String createdUser, String documentType,
+      LocalDate date, String referrerId, String description, Resource resource)
   {
     this.id = id;
-    this.organizationId = organizationId;
-    this.groupId = groupId;
-    this.documentName = documentName;
-    this.type = documentType;
-    this.createdUser = createdUser;
-    this.file = file;
-    this.path = path;
-    this.createdDate = date;
+    this.documentName = Validate.notBlank(documentName);
+    this.organizationId = Validate.notBlank(organizationId);
+    this.groupId = Validate.notBlank(groupId);
+    this.documentType = Validate.notBlank(documentType);
+    this.createdUser = Validate.notBlank(createdUser);
+    this.createdDate = Validate.notNull(date);
+    this.referrerId = Validate.notBlank(referrerId);
+    this.description = description;
+    this.resource = resource;
   }
 
   public void setId(String id)
@@ -49,15 +54,16 @@ public class Document
     this.documentName = documentName;
   }
 
-  public void setType(String type)
+  public void setDocumentType(String documentType)
   {
-    this.type = type;
+    this.documentType = documentType;
   }
 
   public void setCreatedUser(String createdUser)
   {
     this.createdUser = this.createdUser;
   }
+
   public void setDate(LocalDate date)
   {
     this.createdDate = date;
@@ -66,16 +72,6 @@ public class Document
   public void setDescription(String description)
   {
     this.description = description;
-  }
-
-  public void setFile(String file)
-  {
-    this.file = file;
-  }
-
-  public void setPath(String path)
-  {
-    this.path = path;
   }
 
   public String getId()
@@ -98,9 +94,9 @@ public class Document
     return documentName;
   }
 
-  public String getType()
+  public String getDocumentType()
   {
-    return type;
+    return documentType;
   }
 
   public String getCreatedUser()
@@ -118,13 +114,43 @@ public class Document
     return description;
   }
 
-  public String getFile()
+  public String getReferrerId()
   {
-    return file;
+    return referrerId;
   }
 
-  public String getPath()
+  public void setReferrerId(String referrerId)
   {
-    return path;
+    this.referrerId = referrerId;
+  }
+
+  public void setCreatedDate(LocalDate createdDate)
+  {
+    this.createdDate = createdDate;
+  }
+
+  public Resource getResource()
+  {
+    return resource;
+  }
+
+  public void setFileResource(Resource fileBytes)
+  {
+    this.resource = fileBytes;
+  }
+
+  public String getContentId()
+  {
+    return contentId;
+  }
+
+  public void setContentId(String contentId)
+  {
+    this.contentId = contentId;
+  }
+
+  public void setResource(Resource resource)
+  {
+    this.resource = resource;
   }
 }

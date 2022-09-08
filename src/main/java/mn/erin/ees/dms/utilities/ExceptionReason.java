@@ -5,5 +5,7 @@ public enum ExceptionReason
   INPUT_INVALID,
   NOT_FOUND,
   DUPLICATE,
-  NOT_SAVE_FILE
+  NOT_SAVE_FILE,
+
+  CANNOT_USE_API
 }

@@ -1,117 +1,124 @@
 package mn.erin.ees.dms.domain.document.api;
 
-import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
-import com.mongodb.client.gridfs.model.GridFSFile;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import mn.erin.ees.dms.domain.document.model.Document;
-import mn.erin.ees.dms.domain.document.model.DocumentInput;
+import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
 import mn.erin.ees.dms.domain.document.usecase.CreateDocument;
-import mn.erin.ees.dms.domain.document.usecase.DocumentDownloadDeleteRepository;
-import mn.erin.ees.dms.domain.document.usecase.DocumentRepository;
 import mn.erin.ees.dms.domain.document.usecase.DownloadDocument;
-import mn.erin.ees.dms.domain.document.usecase.GetDocuments;
-import mn.erin.ees.dms.domain.document_type.usecase.DocumentTypeRepository;
+import mn.erin.ees.dms.domain.document.usecase.GetAllDocumentsByReferrerId;
+import mn.erin.ees.dms.domain.document.usecase.GetDocument;
+import mn.erin.ees.dms.domain.document_type.repository.DocumentTypeRepository;
 import mn.erin.ees.dms.rest.DocumentApiDelegate;
+import mn.erin.ees.dms.rest.model.DocumentCreationResponseRestModel;
+import mn.erin.ees.dms.rest.model.DocumentOutputResponseRestModel;
+import mn.erin.ees.dms.rest.model.DocumentOutputRestModel;
+import mn.erin.ees.dms.rest.model.DocumentOutputsRestModel;
 import mn.erin.ees.dms.rest.model.DocumentRestModel;
 import mn.erin.ees.dms.rest.model.ErrorRestModel;
 import mn.erin.ees.dms.utilities.DocumentCreationException;
+import mn.erin.ees.dms.utilities.DocumentGettingException;
 
 @Component
 @Service
 public class DocumentsRestService implements DocumentApiDelegate
 {
-  @Autowired
-  private DocumentRepository documentRepository;
-
-  @Autowired
-  private DocumentDownloadDeleteRepository documentDownloadDeleteRepository;
-  @Autowired
+  private final DocumentRepository documentRepository;
   private DocumentTypeRepository documentTypeRepository;
 
-  @Autowired
-  private GridFsTemplate gridFsTemplate;
+  public DocumentsRestService(DocumentRepository documentRepository/*, DocumentTypeRepository documentTypeRepository*/)
+  {
+    this.documentRepository = documentRepository;
+    //    this.documentTypeRepository = documentTypeRepository;
+  }
 
   @Override
-  public ResponseEntity<DocumentRestModel> createDocument(String organizationId, String groupId, String documentName, String createdUser, String documentType,
-      String createDate, String description, MultipartFile file)
+  public ResponseEntity<DocumentCreationResponseRestModel> upload(String organizationId, String groupId, String createdUser, String documentName,
+      String documentType, String createdDate, String description, String journalEntryId, MultipartFile file)
   {
     try
     {
-      LocalDate date = LocalDate.parse(createDate);
-      Document document = new CreateDocument(documentRepository, documentTypeRepository, gridFsTemplate, documentDownloadDeleteRepository).execute(
-          new DocumentInput(organizationId, groupId, documentName, createdUser, documentType,
-              date, description, file));
-      // todo convert document to document rest model
-      DocumentRestModel documentRestModel = new DocumentRestModel();
-      return ResponseEntity.created(URI.create("id")).body(documentRestModel);
+      LocalDate date = LocalDate.parse(createdDate);
+      String documentId = new CreateDocument(documentRepository, documentTypeRepository).execute(
+          new DocumentInput(organizationId, groupId, documentName, createdUser, documentType, date, description, journalEntryId, file));
+      return ResponseEntity.created(URI.create("id")).body(new DocumentCreationResponseRestModel().id(documentId));
     }
     catch (DocumentCreationException e)
     {
-      return (ResponseEntity) ResponseEntity.badRequest().body(new ErrorRestModel().reason(e.reason.name()).message(e.getMessage()));
-    }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
+      return ResponseEntity.internalServerError().body(new DocumentCreationResponseRestModel().error(new ErrorRestModel().message(e.getMessage())));
     }
   }
 
   @Override
-  public ResponseEntity<List<DocumentRestModel>> getDocuments(String organizationId, String groupId)
+  public ResponseEntity<Resource> downloadDocument(String contentId)
   {
-    GetDocuments getDocuments = new GetDocuments(documentRepository);
+    DownloadDocument downloadDocument = new DownloadDocument(documentRepository);
     try
     {
-      List<Document> documentsList = getDocuments.execute(organizationId, groupId);
-      List<DocumentRestModel> documents = new ArrayList<>();
-      for (Document document1 : documentsList)
-      {
-        documents.add(mapToDocumentRestModel(document1));
-      }
-      return ResponseEntity.ok(documents);
+      return ResponseEntity.ok(downloadDocument.execute(contentId));
     }
-    catch (Exception e)
+    catch (DocumentGettingException e)
     {
-      return (ResponseEntity) ResponseEntity.badRequest().body(e);
+      return ResponseEntity.internalServerError().body(null);
     }
   }
 
-  private DocumentRestModel mapToDocumentRestModel(Document document)
+  @Override
+  public ResponseEntity<DocumentOutputResponseRestModel> getDocument(String journalEntryId, String name)
+  {
+    GetDocument getDocument = new GetDocument(documentRepository);
+    try
+    {
+      return ResponseEntity.ok(
+          new DocumentOutputResponseRestModel().documentOutput(convertToDocumentOutputRestModel(getDocument.execute(journalEntryId, name))));
+    }
+    catch (DocumentGettingException e)
+    {
+      return ResponseEntity.internalServerError().body(new DocumentOutputResponseRestModel().error(new ErrorRestModel().message(e.getMessage())));
+    }
+  }
+
+  @Override
+  public ResponseEntity<DocumentOutputsRestModel> getAllDocuments(String journalEntryId)
+  {
+    try
+    {
+      return ResponseEntity.ok(new DocumentOutputsRestModel().documentOutputs(
+          new GetAllDocumentsByReferrerId(documentRepository).execute(journalEntryId).stream().map(this::convertToDocumentOutputRestModel)
+              .collect(Collectors.toList())));
+    }
+    catch (DocumentGettingException e)
+    {
+      return ResponseEntity.internalServerError().body(new DocumentOutputsRestModel().error(new ErrorRestModel().message(e.getMessage())));
+    }
+  }
+
+  private DocumentRestModel convertToDocumentRestModel(Document document)
   {
     return new DocumentRestModel()
         .id(document.getId())
         .organizationId(document.getOrganizationId())
         .groupId(document.getGroupId())
         .name(document.getDocumentName())
-        .type(document.getType())
+        .type(document.getDocumentType())
         .createdUser(document.getCreatedUser())
         .date(document.getCreatedDate().toString())
-        .file(document.getFile())
-        .path(document.getPath());
+        .referrerId(document.getReferrerId());
   }
-  @Override
-  public ResponseEntity<org.springframework.core.io.Resource> getFile(String contentId) {
-    DownloadDocument downloadDocument = new DownloadDocument(documentDownloadDeleteRepository);
-        try
-        {
-          GridFsResource data = downloadDocument.execute(contentId);
-          return ResponseEntity.ok(data);
-        }
-        catch (Exception e)
-        {
-          return (ResponseEntity) ResponseEntity.badRequest().body(e);
-        }
+
+  private DocumentOutputRestModel convertToDocumentOutputRestModel(DocumentOutput documentOutput)
+  {
+    return new DocumentOutputRestModel()
+        .contentId(documentOutput.getContentId())
+        .contentTypeId(documentOutput.getContentTypeId())
+        .name(documentOutput.getName());
   }
 }

@@ -1,26 +1,27 @@
 package mn.erin.ees.dms.domain.document.usecase;
 
-import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.Resource;
 
-import org.springframework.data.mongodb.gridfs.GridFsResource;
+import mn.erin.ees.dms.domain.document.repository.DocumentRepository;
+import mn.erin.ees.dms.utilities.DocumentGettingException;
+import mn.erin.ees.dms.utilities.ExceptionReason;
 
 public class DownloadDocument
 {
-  private DocumentDownloadDeleteRepository documentDownloadDeleteRepository;
+  private final DocumentRepository documentRepository;
 
-  public DownloadDocument(DocumentDownloadDeleteRepository documentDownloadDeleteRepository)
+  public DownloadDocument(DocumentRepository documentRepository)
   {
-    this.documentDownloadDeleteRepository = documentDownloadDeleteRepository;
+    this.documentRepository = documentRepository;
   }
-  public GridFsResource execute(String contentId)
+
+  public Resource execute(String contentId) throws DocumentGettingException
   {
-      try
-      {
-        return documentDownloadDeleteRepository.fileDownload(contentId);
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e);
-      }
+    if (StringUtils.isBlank(contentId))
+    {
+      throw new DocumentGettingException(ExceptionReason.INPUT_INVALID, "content id required!");
+    }
+    return documentRepository.downloadByContentId(contentId);
   }
 }
